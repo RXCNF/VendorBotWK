@@ -15,16 +15,16 @@ API key yang sudah ter-expose di repository public **TIDAK AMAN** dan harus di-r
 3. **Generate API key baru**
 4. Update di file `config.js` lokal (tidak akan di-commit lagi)
 
-### 2. Ubah Repository Menjadi Private
+### 2. Ubah Repository Menjadi Private ✅ **SUDAH DILAKUKAN**
 
-**Cara mengubah repository menjadi Private di GitHub:**
+**Status**: Repository sudah diubah menjadi **PRIVATE** ✅
 
-1. Buka repository: https://github.com/RXCNF/VendorBot
-2. Klik **Settings** (di menu atas repository)
-3. Scroll ke bawah ke bagian **Danger Zone**
-4. Klik **Change visibility** → **Change to private**
-5. Konfirmasi dengan mengetik nama repository: `RXCNF/VendorBot`
-6. Klik **I understand, change repository visibility**
+Repository sekarang hanya bisa diakses oleh:
+- Owner (Anda)
+- Collaborator yang Anda tambahkan
+- Tidak bisa diakses oleh publik
+
+**Catatan**: Meskipun repository sudah private, API key yang ter-expose di commit history masih bisa dilihat oleh siapa saja yang punya akses ke repository. Oleh karena itu, **tetap penting untuk regenerate API key**.
 
 ### 3. File `config.js` Sudah Dihapus dari Repository
 
