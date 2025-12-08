@@ -11,7 +11,7 @@ File `config.js` yang berisi API key **sudah ter-commit ke repository public** s
 API key yang sudah ter-expose di repository public **TIDAK AMAN** dan harus di-regenerate:
 
 1. Login ke [Maia Dashboard](https://docs.getmaia.ai) atau hubungi info@prodlane.io
-2. **Revoke/Delete** API key yang ter-expose: `sk-ZfjQ4VwUsYsGbXfZ0ceBog`
+2. **Revoke/Delete** API key yang ter-expose (cek di commit history untuk melihat key yang ter-expose)
 3. **Generate API key baru**
 4. Update di file `config.js` lokal (tidak akan di-commit lagi)
 

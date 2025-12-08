@@ -24,6 +24,6 @@ uploads/*
 !vendor_qa_dataset.csv
 !example_vendor_data.csv
 
-# Config files with sensitive data
+# Config files with sensitive data (DO NOT COMMIT)
 config.js
 
