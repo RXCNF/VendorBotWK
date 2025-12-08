@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+
+# Environment variables
+.env
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Uploads (keep CSV files in repo, but ignore uploads folder)
+uploads/*
+!uploads/.gitkeep
+
+# Keep important CSV files
+!vendor_qa_dataset.csv
+!example_vendor_data.csv
+
