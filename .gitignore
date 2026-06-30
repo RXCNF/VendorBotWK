@@ -28,3 +28,6 @@ uploads/*
 
 # Config files with sensitive data (JANGAN DI-COMMIT)
 config.js
+
+# Data
+data/
