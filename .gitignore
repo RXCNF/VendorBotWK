@@ -36,4 +36,5 @@ data/
 desktop.ini
 test_*.js
 certs/
+docs/
 
