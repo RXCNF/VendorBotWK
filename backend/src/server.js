@@ -15,7 +15,7 @@ require('dotenv').config({ path: path.join(__dirname, '../.env') });
 // Configure Multer for Profile Pictures
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        const uploadDir = path.join(__dirname, '../public/uploads/profiles');
+        const uploadDir = path.join(__dirname, '../../frontend/uploads/profiles');
         if (!fs.existsSync(uploadDir)) {
             fs.mkdirSync(uploadDir, { recursive: true });
         }
@@ -168,7 +168,7 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 // Serve static files from public directory
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, '../../frontend')));
 
 // Knowledge base akan di-load otomatis dari file CSV
 // Tidak perlu multer untuk upload karena file dihandle di backend
