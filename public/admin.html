@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Admin Dashboard - VendorBot</title>
+    <link rel="icon" type="image/png" href="assets/images/robot-splash.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="assets/css/glass-theme.css">
+
+    <script>
+        // Pre-initialization: Apply theme before body renders
+        (function () {
+            const savedTheme = localStorage.getItem('vendorBot_theme') || 'dark';
+            if (savedTheme === 'light') {
+                document.documentElement.classList.add('light-mode');
+            }
+        })();
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * {
+            font-family: 'Inter', sans-serif;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+            min-height: 100vh;
+            color: #ffffff;
+            transition: background 0.3s ease;
+        }
+
+        body.light-mode {
+            background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%);
+            color: #1f2937;
+        }
+
+        /* Sidebar Responsive Logic */
+        .sidebar {
+            transition: width 0.3s ease;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        @media (min-width: 769px) {
+            .sidebar {
+                position: fixed !important;
+                height: 100%;
+                width: 0;
+                left: 0;
+                top: 0;
+                z-index: 1000;
+                transform: none !important;
+            }
+
+            .sidebar.open {
+                width: 256px;
+            }
+
+            #mainContent {
+                transition: margin-left 0.3s ease;
+            }
+
+            .sidebar.open~#mainContent {
+                margin-left: 256px;
+            }
+
+            .sidebar.closed~#mainContent {
+                margin-left: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed !important;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                width: 85% !important;
+                max-width: 320px !important;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                z-index: 1000;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+                width: 85% !important;
+            }
+
+            .sidebar-overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 999;
+            }
+
+            .sidebar-overlay:not(.hidden) {
+                display: block;
+            }
+
+            #mainContent {
+                margin-left: 0 !important;
+            }
+        }
+
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Tab Styles */
+        .tab-btn {
+            padding-bottom: 0.75rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-primary);
+        }
+
+        .tab-btn.active {
+            color: #3b82f6;
+            border-bottom-color: #3b82f6;
+        }
+
+        body.light-mode .tab-btn.active {
+            color: #2563eb;
+            border-bottom-color: #2563eb;
+        }
+    </style>
+</head>
+
+<body class="flex h-screen overflow-hidden">
+    <script>
+        if (document.documentElement.classList.contains('light-mode')) {
+            document.body.classList.add('light-mode');
+        }
+    </script>
+
+    <!-- Background Ornaments -->
+    <div class="background-ornaments">
+        <div class="ornament red"></div>
+        <div class="ornament blue"></div>
+    </div>
+
+    <div id="sidebarOverlay" class="sidebar-overlay hidden" onclick="toggleSidebar()"></div>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="sidebar glass-sidebar flex flex-col open">
+        <!-- Sidebar Header -->
+        <div class="p-4 glass-panel shrink-0 relative z-20 flex items-center gap-3">
+            <div class="flex-shrink-0 flex items-center waskita-logo">
+                <img src="assets/images/robot-splash.png" alt="VendorBot Logo"
+                    class="w-8 h-8 md:w-10 md:h-10 object-contain" />
+            </div>
+            <div>
+                <h1 class="text-white text-base font-bold">VendorBot</h1>
+                <p class="text-gray-400 text-[10px]">Waskita Karya</p>
+            </div>
+        </div>
+
+        <!-- Sidebar Content -->
+        <div class="flex-1 overflow-y-auto scrollbar-hide py-4 px-2">
+            <div class="sidebar-section-title">MENU</div>
+
+            <nav class="space-y-1 mb-6">
+                <a href="index.html" class="menu-link">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z">
+                        </path>
+                    </svg>
+                    <span>Vendor Bot</span>
+                </a>
+
+                <a href="data-vendor.html" class="menu-link">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
+                        </path>
+                    </svg>
+                    <span>Data Vendor</span>
+                </a>
+
+                <a href="dashboard.html" class="menu-link">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path>
+                    </svg>
+                    <span>Dashboard</span>
+                </a>
+
+                <!-- Admin Links (Active) -->
+                <a href="admin.html" id="adminPanelLink" class="menu-link active">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
+                        </path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                    <span>Panel Admin</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-section-title">GENERAL</div>
+            <nav class="space-y-1">
+                <button id="settingsBtn" class="menu-link w-full text-left">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z">
+                        </path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                    <span>Pengaturan</span>
+                </button>
+                <button id="logoutBtn" class="menu-link w-full text-left hover:text-red-400">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
+                        </path>
+                    </svg>
+                    <span>Keluar</span>
+                </button>
+            </nav>
+        </div>
+
+        <!-- Sidebar Footer -->
+        <div class="p-4 border-t border-gray-800/30">
+            <div class="flex items-center space-x-3">
+                <div id="sidebarInitialContainer"
+                    class="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white text-xs font-bold flex-shrink-0 shadow-lg shadow-blue-500/30">
+                    <span id="userInitial">A</span>
+                </div>
+                <!-- Avatar image option -->
+                <img id="sidebarAvatar" src="" class="w-8 h-8 rounded-full object-cover flex-shrink-0 hidden shadow-lg"
+                    alt="Avatar">
+                <div class="min-w-0 flex-1">
+                    <p id="userNameDisplay" class="text-white text-sm font-medium truncate">Admin</p>
+                    <p id="userRoleDisplay" class="text-blue-400 text-xs truncate">Admin</p>
+                </div>
+            </div>
+            <div class="mt-2 text-center">
+                <span class="text-gray-500 text-[10px]">VendorBot v1.0</span>
+            </div>
+        </div>
+        <!-- Resize Handle -->
+        <div id="sidebarResizeHandle" class="sidebar-resize-handle"></div>
+    </aside>
+
+    <div id="mainContent" class="flex-1 flex flex-col overflow-hidden">
+        <header class="theme-header">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <button id="sidebarToggleBtn" class="menu-toggle-btn" title="Toggle Sidebar">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                    <div>
+                        <h1 class="text-white text-lg md:text-xl font-bold">Admin Panel</h1>
+                        <p class="text-gray-400 text-xs md:text-sm">Database & User Management</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button id="themeToggle"
+                        class="text-gray-400 hover:text-white transition-colors px-3 py-2 rounded-lg hover:bg-gray-800">
+                        <svg id="themeIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z">
+                            </path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-1 overflow-auto p-4 md:p-8">
+            <div class="max-w-7xl mx-auto">
+                <!-- Dashboard Tabs -->
+                <div class="flex space-x-8 border-b border-gray-800 mb-8">
+                    <button onclick="switchTab('users')" id="tab-users" class="tab-btn active">Managemen User</button>
+                    <button onclick="switchTab('database')" id="tab-database" class="tab-btn">Database Explorer</button>
+                </div>
+
+                <!-- USER MANAGEMENT SECTION -->
+                <section id="section-users" class="space-y-6">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-lg font-bold">Daftar Pengguna</h2>
+                        <button onclick="loadUsers()"
+                            class="p-2 rounded bg-gray-800 hover:bg-gray-700 transition-colors" title="Reload">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path
+                                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
+                                </path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="overflow-x-auto glass-panel rounded-xl">
+                        <table class="w-full text-left text-sm">
+                            <thead class="bg-black/20 text-gray-400 uppercase text-[10px] tracking-wider">
+                                <tr>
+                                    <th class="px-6 py-4">Nama</th>
+                                    <th class="px-6 py-4">Email</th>
+                                    <th class="px-6 py-4">Password</th>
+                                    <th class="px-6 py-4">Role</th>
+                                    <th class="px-6 py-4">Terdaftar</th>
+                                    <th class="px-6 py-4">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="userTableBody" class="divide-y divide-gray-800">
+                                <tr>
+                                    <td colspan="6" class="px-6 py-10 text-center text-gray-500 italic">Memuat data
+                                        pengguna...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- DATABASE EXPLORER SECTION -->
+                <section id="section-database" class="hidden space-y-8">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4" id="tableStats">
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="flex items-center justify-between">
+                            <h2 class="text-lg font-bold">Data Snapshot (10 Baris Terakhir)</h2>
+                            <div id="performanceEvalSummary" class="flex space-x-4">
+                            </div>
+                        </div>
+                        <div id="dbSnapshotContainer" class="space-y-8">
+                            <p class="text-gray-500 italic">Memuat snapshot database...</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            const mainContent = document.getElementById('mainContent');
+            const isDesktop = window.innerWidth >= 769;
+
+            if (isDesktop) {
+                const isOpen = sidebar.classList.contains('open');
+                if (isOpen) {
+                    sidebar.classList.remove('open');
+                    sidebar.classList.add('closed');
+                    sidebar.style.width = '0';
+                    if (mainContent) mainContent.style.marginLeft = '0';
+                } else {
+                    sidebar.classList.remove('closed');
+                    sidebar.classList.add('open');
+                    sidebar.style.width = '256px';
+                    if (mainContent) mainContent.style.marginLeft = '256px';
+                }
+            } else {
+                sidebar.classList.toggle('open');
+                overlay.classList.toggle('hidden');
+            }
+        }
+
+        function logout() {
+            if (confirm('Yakin ingin keluar?')) {
+                sessionStorage.clear();
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Theme Handling Standard
+        const themeToggle = document.getElementById('themeToggle');
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                const isLight = document.body.classList.contains('light-mode');
+                applyTheme(isLight ? 'dark' : 'light');
+            });
+        }
+
+        function applyTheme(theme) {
+            const isLight = theme === 'light';
+            document.body.classList.toggle('light-mode', isLight);
+            document.documentElement.classList.toggle('light-mode', isLight);
+            localStorage.setItem('vendorBot_theme', theme);
+            updateThemeIcons(theme);
+        }
+
+        function updateThemeIcons(theme) {
+            const isLight = theme === 'light';
+            const mainIcon = document.querySelector('#themeIcon');
+            const lightPath = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>';
+            const darkPath = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>';
+            if (mainIcon) mainIcon.innerHTML = isLight ? lightPath : darkPath;
+        }
+
+        // Tab Switching
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('tab-' + tab).classList.add('active');
+
+            document.getElementById('section-users').classList.add('hidden');
+            document.getElementById('section-database').classList.add('hidden');
+            document.getElementById('section-' + tab).classList.remove('hidden');
+
+            if (tab === 'users') loadUsers();
+            if (tab === 'database') loadDbSnapshot();
+        }
+
+        // Load Users
+        async function loadUsers() {
+            try {
+                const email = sessionStorage.getItem('vendorbot_user_email');
+                const response = await fetch('/api/admin/users', { headers: { 'email': email } });
+
+                const contentType = response.headers.get("content-type");
+                if (contentType && contentType.indexOf("application/json") !== -1) {
+                    const users = await response.json();
+                    if (!response.ok) {
+                        alert('Gagal: ' + (users.error || 'Unknown error'));
+                        return;
+                    }
+                    renderUsers(users);
+                } else {
+                    console.error('Server HTML Error');
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function renderUsers(users) {
+            const tbody = document.getElementById('userTableBody');
+            tbody.innerHTML = '';
+            users.forEach(user => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-white/5 transition-colors';
+                tr.innerHTML = `
+                    <td class="px-6 py-4 font-medium text-white">${user.fullname}</td>
+                    <td class="px-6 py-4 text-gray-400">${user.email}</td>
+                    <td class="px-6 py-4 text-xs font-mono text-amber-500/80">${user.password}</td>
+                    <td class="px-6 py-4">
+                        <select onchange="updateRole('${user.email}', this.value)" class="glass-input rounded-lg text-xs p-2 outline-none border-none">
+                            <option value="staff scm" class="text-black" ${user.role === 'staff scm' ? 'selected' : ''}>Staff SCM</option>
+                            <option value="manager" class="text-black" ${user.role === 'manager' ? 'selected' : ''}>Manager</option>
+                            <option value="admin" class="text-black" ${user.role === 'admin' ? 'selected' : ''}>Admin</option>
+                        </select>
+                    </td>
+                    <td class="px-6 py-4 text-gray-500 text-xs font-medium">${new Date(user.created_at).toLocaleDateString('id-ID')}</td>
+                    <td class="px-6 py-4">
+                        <button onclick="deleteUser('${user.email}')" class="text-gray-500 hover:text-red-500 transition-all p-2 hover:bg-red-500/10 rounded-lg" title="Hapus User">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        async function updateRole(targetEmail, newRole) {
+            if (!confirm(`Ubah role ${targetEmail} menjadi ${newRole}?`)) { loadUsers(); return; }
+            try {
+                const email = sessionStorage.getItem('vendorbot_user_email');
+                const response = await fetch('/api/admin/update-role', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'email': email },
+                    body: JSON.stringify({ targetEmail, newRole })
+                });
+                if (response.ok) { alert('Role diperbarui!'); } else { alert('Gagal'); }
+                loadUsers();
+            } catch (err) { alert('Terjadi kesalahan'); }
+        }
+
+        async function deleteUser(targetEmail) {
+            if (!confirm(`HAPUS PERMANEN akun ${targetEmail}?`)) return;
+            try {
+                const email = sessionStorage.getItem('vendorbot_user_email');
+                const response = await fetch(`/api/admin/delete-user?targetEmail=${encodeURIComponent(targetEmail)}`, {
+                    method: 'DELETE',
+                    headers: { 'email': email }
+                });
+                if (response.ok) { alert('User berhasil dihapus!'); loadUsers(); } else { alert('Gagal'); }
+            } catch (err) { alert('Error: ' + err.message); }
+        }
+
+        async function loadDbSnapshot() {
+            try {
+                const email = sessionStorage.getItem('vendorbot_user_email');
+                const response = await fetch('/api/admin/db-snapshot', { headers: { 'email': email } });
+                const snapshot = await response.json();
+
+                const statsContainer = document.getElementById('tableStats');
+                statsContainer.innerHTML = '';
+                const detailsContainer = document.getElementById('dbSnapshotContainer');
+                detailsContainer.innerHTML = '';
+
+                for (const table in snapshot) {
+                    statsContainer.innerHTML += `
+                        <div class="glass-panel p-6 rounded-xl border border-white/5">
+                            <p class="text-[10px] text-gray-500 uppercase tracking-[0.2em] font-black mb-2">${table}</p>
+                            <h3 class="text-4xl font-black text-white">${snapshot[table].total}</h3>
+                            <p class="text-[10px] text-gray-500 mt-2 font-bold italic">records</p>
+                        </div>
+                    `;
+
+                    const section = document.createElement('div');
+                    section.className = 'space-y-4';
+                    let tableHtml = `
+                        <div class="flex items-center justify-between">
+                            <h3 class="font-bold flex items-center space-x-3 text-white">
+                                <span class="w-2.5 h-2.5 rounded-full bg-blue-500 shadow-lg shadow-blue-500/50"></span>
+                                <span class="tracking-tight italic opacity-80">Table: ${table}</span>
+                            </h3>
+                        </div>
+                        <div class="overflow-x-auto glass-panel rounded-2xl border border-white/5">
+                            <table class="w-full text-[11px] text-left">
+                                <thead class="bg-white/5 text-gray-400 font-bold uppercase tracking-wider">
+                                    <tr>
+                    `;
+                    if (snapshot[table].sample.length > 0) {
+                        const keys = Object.keys(snapshot[table].sample[0]);
+                        keys.forEach(k => { tableHtml += `<th class="px-6 py-4 border-b border-white/5">${k}</th>`; });
+                        tableHtml += `</tr></thead><tbody class="divide-y divide-white/5 text-gray-300">`;
+                        snapshot[table].sample.forEach(row => {
+                            tableHtml += `<tr class="hover:bg-white/5 transition-colors">`;
+                            keys.forEach(k => {
+                                let val = row[k];
+                                if (typeof val === 'object') val = JSON.stringify(val).substring(0, 50) + '...';
+                                tableHtml += `<td class="px-6 py-3 whitespace-nowrap font-medium">${val}</td>`;
+                            });
+                            tableHtml += `</tr>`;
+                        });
+                    } else {
+                        tableHtml += `<th class="px-6 py-4">Data Kosong</th></tr></thead><tbody><tr><td class="px-6 py-12 text-center text-gray-600 font-bold italic">No data found in this segment</td></tr>`;
+                    }
+                    tableHtml += `</tbody></table></div>`;
+
+                    if (table === 'query_logs' && snapshot[table].sample.length > 0) {
+                        const logs = snapshot[table].sample;
+                        const avgSim = logs.reduce((acc, curr) => acc + (curr.rag_top_similarity || 0), 0) / logs.length;
+                        const avgPre = logs.reduce((acc, curr) => acc + (curr.pre_processing_time || 0), 0) / logs.length;
+                        const avgStream = logs.reduce((acc, curr) => acc + (curr.stream_duration || 0), 0) / logs.length;
+
+                        const summaryHtml = `
+                            <div class="flex space-x-6 glass-panel p-6 rounded-2xl border border-white/10 items-center justify-between shadow-2xl">
+                                <div class="text-center flex-1">
+                                    <p class="text-[9px] text-gray-500 uppercase font-black tracking-[0.2em] mb-2">Sim Score</p>
+                                    <p class="text-xl font-black text-amber-500 font-mono">${avgSim.toFixed(4)}</p>
+                                </div>
+                                <div class="h-10 w-[1px] bg-white/10"></div>
+                                <div class="text-center flex-1">
+                                    <p class="text-[9px] text-gray-500 uppercase font-black tracking-[0.2em] mb-2">Pre-Proc</p>
+                                    <p class="text-xl font-black text-emerald-500 font-mono">${avgPre.toFixed(2)}s</p>
+                                </div>
+                                <div class="h-10 w-[1px] bg-white/10"></div>
+                                <div class="text-center flex-1">
+                                    <p class="text-[9px] text-gray-500 uppercase font-black tracking-[0.2em] mb-2">LLM Stream</p>
+                                    <p class="text-xl font-black text-sky-500 font-mono">${avgStream.toFixed(2)}s</p>
+                                </div>
+                            </div>
+                        `;
+                        const summaryContainer = document.getElementById('performanceEvalSummary');
+                        if (summaryContainer) summaryContainer.innerHTML = summaryHtml;
+                    }
+
+                    section.innerHTML = tableHtml;
+                    detailsContainer.appendChild(section);
+                }
+            } catch (err) { console.error(err); }
+        }
+
+        // Sidebar functions
+        let sidebarWidth = 260; // Default width
+        const minSidebarWidth = 200;
+        const maxSidebarWidth = 480;
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggleBtn = document.getElementById('sidebarToggleBtn');
+        const sidebarResizeHandle = document.getElementById('sidebarResizeHandle');
+
+        function initializeSidebar() {
+            const savedWidth = localStorage.getItem('vendorBot_sidebarWidth');
+            if (savedWidth) {
+                sidebarWidth = parseInt(savedWidth);
+            }
+
+            const savedSidebarState = localStorage.getItem('vendorBot_sidebarOpen');
+            const mainContent = document.getElementById('mainContent');
+
+            if (window.innerWidth >= 769) {
+                sidebar.style.width = sidebarWidth + 'px';
+                if (savedSidebarState === 'false') {
+                    sidebar.classList.add('closed');
+                    sidebar.style.width = '0';
+                    if (mainContent) mainContent.style.marginLeft = '0';
+                    updateMenuIcon(false);
+                } else {
+                    sidebar.classList.add('open');
+                    sidebar.style.width = sidebarWidth + 'px';
+                    if (mainContent) mainContent.style.marginLeft = sidebarWidth + 'px';
+                    updateMenuIcon(true);
+                }
+            } else {
+                sidebar.classList.remove('open', 'closed');
+                updateMenuIcon(false);
+            }
+        }
+
+        window.toggleSidebar = function () {
+            const mainContent = document.getElementById('mainContent');
+            if (window.innerWidth >= 769) {
+                const isOpen = sidebar.classList.contains('open');
+                if (isOpen) {
+                    sidebar.classList.remove('open');
+                    sidebar.classList.add('closed');
+                    sidebar.style.width = '0';
+                    localStorage.setItem('vendorBot_sidebarOpen', 'false');
+                    updateMenuIcon(false);
+                } else {
+                    sidebar.classList.remove('closed');
+                    sidebar.classList.add('open');
+                    sidebar.style.width = sidebarWidth + 'px';
+                    localStorage.setItem('vendorBot_sidebarOpen', 'true');
+                    updateMenuIcon(true);
+                }
+            } else {
+                const isOpen = sidebar.classList.contains('open');
+                sidebar.classList.toggle('open');
+                updateMenuIcon(!isOpen);
+            }
+        };
+
+        function updateMenuIcon(isOpen) {
+            if (!sidebarToggleBtn) return;
+            if (window.innerWidth < 768) {
+                sidebarToggleBtn.innerHTML = isOpen
+                    ? '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>'
+                    : '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>';
+            } else {
+                sidebarToggleBtn.innerHTML = isOpen
+                    ? '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7"></path></svg>'
+                    : '<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>';
+            }
+        }
+
+        // Resizing Logic
+        if (sidebarResizeHandle) {
+            let isResizing = false;
+            sidebarResizeHandle.addEventListener('mousedown', () => {
+                isResizing = true;
+                document.body.style.cursor = 'col-resize';
+                document.body.classList.add('select-none');
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (!isResizing) return;
+                if (e.clientX >= minSidebarWidth && e.clientX <= maxSidebarWidth) {
+                    sidebarWidth = e.clientX;
+                    sidebar.style.width = sidebarWidth + 'px';
+                }
+            });
+
+            document.addEventListener('mouseup', () => {
+                if (isResizing) {
+                    isResizing = false;
+                    document.body.style.cursor = 'default';
+                    document.body.classList.remove('select-none');
+                    localStorage.setItem('vendorBot_sidebarWidth', sidebarWidth);
+                }
+            });
+        }
+
+        // Initial Load
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeSidebar();
+            sidebarToggleBtn?.addEventListener('click', toggleSidebar);
+
+            const savedTheme = localStorage.getItem('vendorBot_theme') || 'dark';
+            applyTheme(savedTheme);
+
+            const role = sessionStorage.getItem('vendorbot_user_role');
+            if (role !== 'admin') {
+                alert('Akses ditolak! Anda harus memiliki role Admin.');
+                window.location.href = 'index.html';
+                return;
+            }
+
+            const userName = sessionStorage.getItem('vendorbot_user_name');
+            const userAvatar = sessionStorage.getItem('vendorbot_user_avatar');
+
+            if (userName) {
+                document.getElementById('userNameDisplay').textContent = userName;
+                document.getElementById('userInitial').textContent = userName.charAt(0).toUpperCase();
+            }
+
+            // Avatar Display
+            const avatarImg = document.getElementById('sidebarAvatar');
+            const initialContainer = document.getElementById('sidebarInitialContainer');
+            if (userAvatar && avatarImg) {
+                avatarImg.src = userAvatar;
+                avatarImg.classList.remove('hidden');
+                initialContainer?.classList.add('hidden');
+            }
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const tab = urlParams.get('tab');
+            if (tab === 'database') { switchTab('database'); } else { loadUsers(); }
+        });
+    </script>
+    <!-- Settings Modal (Centralized Style) -->
+    <div id="profileModal" class="modal">
+        <!-- Backdrop -->
+        <div class="modal-backdrop" id="profileModalBackdrop"></div>
+
+        <!-- Modal Content -->
+        <div class="modal-container" id="profileModalContent">
+            <!-- Close Button -->
+            <button id="closeProfileModal" class="absolute top-4 right-4 text-gray-400 hover:text-white z-10">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12">
+                    </path>
+                </svg>
+            </button>
+
+            <div class="flex h-[550px]">
+                <!-- Sidebar Tabs -->
+                <div class="w-44 border-r border-gray-800 bg-gray-950 p-6 pt-14 space-y-3">
+                    <button id="tabUmumBtn"
+                        class="w-full text-left px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 bg-blue-600/10 text-blue-400 border border-blue-500/20 shadow-[0_0_15px_rgba(59,130,246,0.1)]">
+                        <div class="flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924-1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                            </svg>
+                            Umum
+                        </div>
+                    </button>
+                    <button id="tabAkunBtn"
+                        class="w-full text-left px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 text-gray-400 hover:text-white hover:bg-white/5">
+                        <div class="flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                            Akun
+                        </div>
+                    </button>
+                </div>
+
+                <!-- Content Area -->
+                <div class="flex-1 p-8 overflow-y-auto bg-gray-900/50">
+                    <!-- Tab: Umum -->
+                    <div id="tabUmum" class="space-y-8">
+                        <div>
+                            <h2 class="text-2xl font-bold text-white mb-2">Pengaturan Umum</h2>
+                            <p class="text-sm text-gray-500">Sesuaikan tampilan dan perilaku VendorBot.</p>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div
+                                class="group flex items-center justify-between p-4 rounded-2xl bg-gray-800/40 border border-gray-700/50 hover:border-gray-600 transition-all">
+                                <div>
+                                    <p class="text-sm font-semibold text-white">Mode Gelap</p>
+                                    <p class="text-xs text-gray-500">Gunakan tema yang lebih nyaman untuk mata
+                                    </p>
+                                </div>
+                                <button id="modalThemeToggle"
+                                    class="p-2.5 rounded-xl bg-gray-900 border border-gray-700 text-gray-400 hover:text-white transition-all">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z">
+                                        </path>
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <div
+                                class="group flex items-center justify-between p-4 rounded-2xl bg-gray-800/40 border border-gray-700/50 hover:border-gray-600 transition-all">
+                                <div>
+                                    <p class="text-sm font-semibold text-white">Tampilan Kompak</p>
+                                    <p class="text-xs text-gray-500">Optimalkan layout untuk informasi yang
+                                        lebih banyak</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" id="compactModeToggle" class="sr-only peer">
+                                    <div
+                                        class="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab: Akun -->
+                    <div id="tabAkun" class="hidden space-y-8">
+                        <div>
+                            <h2 class="text-2xl font-bold text-white mb-2">Profil Pengguna</h2>
+                            <p class="text-sm text-gray-500">Informasi identitas Anda dalam sistem.</p>
+                        </div>
+
+                        <form id="profileForm" class="space-y-6">
+                            <!-- Photo Upload -->
+                            <div class="flex flex-col items-center gap-4">
+                                <div class="relative group">
+                                    <div
+                                        class="w-28 h-28 rounded-full overflow-hidden border-4 border-gray-800 bg-gray-800 transition-all group-hover:border-blue-500/30 flex items-center justify-center">
+                                        <img id="profilePreview" src="" class="w-full h-full object-cover hidden">
+                                        <svg id="defaultProfileIcon" class="w-12 h-12 text-gray-600" fill="none"
+                                            stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z">
+                                            </path>
+                                        </svg>
+                                    </div>
+                                    <label for="avatarInput"
+                                        class="absolute bottom-1 right-1 p-2 bg-blue-600 rounded-full cursor-pointer hover:bg-blue-500 transition-all shadow-xl border-2 border-gray-900">
+                                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z">
+                                            </path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        </svg>
+                                    </label>
+                                    <input type="file" id="avatarInput" name="avatar"
+                                        accept="image/png, image/jpeg, image/jpg" class="hidden">
+                                </div>
+                                <p class="text-xs text-gray-500">JPG, PNG (Maks. 1MB)</p>
+                            </div>
+
+                            <!-- Input Fields -->
+                            <div class="space-y-4">
+                                <div class="space-y-1.5">
+                                    <label class="block text-xs font-bold text-blue-400 uppercase tracking-widest">Nama
+                                        Lengkap</label>
+                                    <input type="text" id="profileName" name="fullname"
+                                        class="w-full rounded-xl bg-gray-800 border-gray-700 text-white placeholder-gray-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 py-3 px-4 transition-all"
+                                        placeholder="Nama Anda" required>
+                                </div>
+                                <div class="space-y-1.5">
+                                    <label
+                                        class="block text-xs font-bold text-gray-500 uppercase tracking-widest">Email</label>
+                                    <input type="email" id="profileEmail"
+                                        class="w-full rounded-xl bg-gray-950 border-gray-800/50 text-gray-500 py-3 px-4 cursor-not-allowed"
+                                        disabled>
+                                </div>
+                                <div class="space-y-1.5">
+                                    <label
+                                        class="block text-xs font-bold text-gray-500 uppercase tracking-widest">Role</label>
+                                    <input type="text" id="profileRole"
+                                        class="w-full rounded-xl bg-gray-950 border-gray-800/50 text-gray-500 py-3 px-4 cursor-not-allowed"
+                                        disabled>
+                                </div>
+                            </div>
+
+                            <!-- Save Button -->
+                            <div class="pt-4">
+                                <button type="submit" id="saveProfileBtn"
+                                    class="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold transition-all transform active:scale-[0.98] shadow-lg shadow-blue-900/20 flex items-center justify-center gap-2">
+                                    <span>Simpan Perubahan</span>
+                                </button>
+                                <div id="saveStatus"
+                                    class="flex items-center justify-center mt-3 h-6 text-sm font-medium">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="assets/js/script.js?v=2"></script>
+</body>
+
+</html>

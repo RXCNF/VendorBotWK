@@ -8,22 +8,23 @@ node_modules/
 *.log
 npm-debug.log*
 
-# OS
+# OS Files
 .DS_Store
 Thumbs.db
 
-# IDE
+# IDE / Editor Files
 .vscode/
 .idea/
 
-# Uploads (keep CSV files in repo, but ignore uploads folder)
+# Uploads (Abaikan isi folder uploads agar file dari lokal tidak masuk ke GitHub, tapi simpan foldernya)
+public/uploads/*
+!public/uploads/.gitkeep
 uploads/*
 !uploads/.gitkeep
 
-# Keep important CSV files
+# Keep important CSV files (jika kamu menggunakan CSV sebagai source data)
 !vendor_qa_dataset.csv
 !example_vendor_data.csv
 
-# Config files with sensitive data (DO NOT COMMIT)
+# Config files with sensitive data (JANGAN DI-COMMIT)
 config.js
-

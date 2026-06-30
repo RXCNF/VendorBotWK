@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Halaman Tidak Ditemukan</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/images/waskita-logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+            color: white;
+            min-height: 100vh;
+        }
+
+        /* Light Mode Support */
+        body.light-mode {
+            background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%);
+            color: #1f2937;
+        }
+
+        body.light-mode .text-gray-400 {
+            color: #4b5563 !important;
+        }
+
+        body.light-mode .bg-white\/10 {
+            background-color: rgba(0, 0, 0, 0.05) !important;
+            border-color: #e5e7eb !important;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        body.light-mode .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body class="flex items-center justify-center p-4">
+    <div
+        class="glass-panel rounded-2xl p-8 max-w-lg w-full text-center transform transition-all hover:scale-[1.01] duration-300">
+        <div class="mb-6 relative">
+            <h1
+                class="text-9xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-600 opacity-20 select-none">
+                404</h1>
+            <div class="absolute inset-0 flex items-center justify-center">
+                <svg class="w-24 h-24 text-blue-500 animate-bounce" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z">
+                    </path>
+                </svg>
+            </div>
+        </div>
+
+        <h2 class="text-2xl font-bold mb-4">Halaman Tidak Ditemukan</h2>
+        <p class="text-gray-400 mb-8 max-w-sm mx-auto">
+            Maaf, halaman yang Anda cari tidak tersedia atau telah dipindahkan.
+        </p>
+
+        <a href="/"
+            class="inline-flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl transition-colors duration-200 font-medium group">
+            <svg class="w-5 h-5 transform group-hover:-translate-x-1 transition-transform" fill="none"
+                stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18">
+                </path>
+            </svg>
+            <span>Kembali ke Beranda</span>
+        </a>
+    </div>
+
+    <script>
+        // Check for saved theme
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+            document.body.classList.add('light-mode');
+        }
+    </script>
+</body>
+
+</html>

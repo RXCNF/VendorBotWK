@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up | VendorBot</title>
+    <link rel="icon" type="image/png" href="assets/images/robot-splash.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+        }
+
+        .signup-illustration {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .input-field {
+            transition: all 0.3s ease;
+        }
+
+        .input-field:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(1, 3, 111, 0.3);
+        }
+
+        .signup-btn {
+            background: linear-gradient(135deg, #01036f 0%, #02058f 100%);
+            transition: all 0.3s ease;
+        }
+
+        .signup-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(1, 3, 111, 0.4);
+        }
+
+        .signup-btn:active {
+            transform: translateY(0);
+        }
+
+        .password-strength {
+            height: 4px;
+            transition: all 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .illustration-container {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex items-center justify-center p-4">
+    <div
+        class="w-full max-w-6xl bg-black/50 backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden border border-gray-800">
+        <div class="flex flex-col md:flex-row">
+            <!-- LEFT: ILLUSTRATION -->
+            <div
+                class="illustration-container hidden md:flex w-full md:w-1/2 bg-gradient-to-br from-[#01036f] to-black items-center justify-center p-8 md:p-12">
+                <div class="text-center space-y-6">
+                    <div class="flex justify-center">
+                        <img src="assets/images/robot-splash.png" alt="Waskita Logo"
+                            class="w-24 h-24 md:w-32 md:h-32 object-contain signup-illustration" loading="eager"
+                            onload="this.style.opacity=1"
+                            onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect fill=%22%2301036f%22 width=%22100%22 height=%22100%22 rx=%2215%22/%3E%3Cpath fill=%22white%22 d=%22M30 70V30h10v35h20V30h10v40H30z%22/%3E%3C/svg%3E'"
+                            style="opacity: 0; transition: opacity 0.3s ease-in-out;">
+                    </div>
+
+                    <div class="space-y-2">
+                        <h2 class="text-3xl md:text-4xl font-bold text-white">VendorBot</h2>
+                        <p class="text-gray-300 text-lg">Asisten AI Informasi Vendor</p>
+                    </div>
+
+                    <div class="space-y-4 text-left max-w-md mx-auto">
+                        <div class="flex items-start space-x-3">
+                            <svg class="w-6 h-6 text-green-400 flex-shrink-0 mt-1" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span class="text-gray-300">Pencarian vendor cepat dan akurat</span>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <svg class="w-6 h-6 text-green-400 flex-shrink-0 mt-1" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span class="text-gray-300">Dukungan AI untuk mencari vendor terbaik</span>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <svg class="w-6 h-6 text-green-400 flex-shrink-0 mt-1" fill="none" stroke="currentColor"
+                                viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span class="text-gray-300">Interface yang mudah digunakan</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT: SIGN UP FORM -->
+            <div class="w-full md:w-1/2 flex items-center justify-center p-6 md:p-12">
+                <div class="w-full max-w-md space-y-6">
+                    <!-- Logo Mobile -->
+                    <div class="flex justify-center md:hidden mb-4">
+                        <img src="assets/images/robot-splash.png" alt="Waskita Logo" class="w-16 h-16 object-contain"
+                            loading="eager" onload="this.style.opacity=1"
+                            onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect fill=%22%2301036f%22 width=%22100%22 height=%22100%22 rx=%2215%22/%3E%3Cpath fill=%22white%22 d=%22M30 70V30h10v35h20V30h10v40H30z%22/%3E%3C/svg%3E'"
+                            style="opacity: 0; transition: opacity 0.3s ease-in-out;">
+                    </div>
+
+                    <!-- Header -->
+                    <div class="text-center space-y-2">
+                        <h1 class="text-2xl md:text-3xl font-bold text-white">Buat Akun Baru</h1>
+                        <p class="text-gray-400 text-sm md:text-base">Daftar untuk mulai menggunakan VendorBot</p>
+                    </div>
+
+                    <!-- Sign Up Form -->
+                    <form id="signupForm" class="space-y-4">
+                        <!-- Nama Lengkap -->
+                        <div class="space-y-2">
+                            <label for="fullname" class="text-sm font-medium text-gray-300 block">Nama Lengkap</label>
+                            <input type="text" id="fullname" name="fullname" placeholder="John Doe" required
+                                class="input-field w-full bg-gray-900/50 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#01036f] focus:ring-2 focus:ring-[#01036f]/20">
+                        </div>
+
+                        <!-- Email -->
+                        <div class="space-y-2">
+                            <label for="email" class="text-sm font-medium text-gray-300 block">Email</label>
+                            <input type="email" id="email" name="email" placeholder="nama@email.com" required
+                                class="input-field w-full bg-gray-900/50 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#01036f] focus:ring-2 focus:ring-[#01036f]/20">
+                            <p id="emailError" class="text-xs text-red-400 hidden"></p>
+                        </div>
+
+                        <!-- Role Selection -->
+                        <div class="space-y-2">
+                            <label for="role" class="text-sm font-medium text-gray-300 block">Role</label>
+                            <select id="role" name="role" required
+                                class="input-field w-full bg-gray-900/50 border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-[#01036f] focus:ring-2 focus:ring-[#01036f]/20 appearance-none">
+                                <option value="staff scm">Staff SCM</option>
+                                <option value="manager">Manager</option>
+                                <option value="admin">Admin</option>
+                                <option value="tamu">Tamu</option>
+                            </select>
+                        </div>
+
+                        <!-- Access Code (Hidden by default) -->
+                        <div id="accessCodeContainer" class="space-y-2 hidden">
+                            <label for="accessCode" class="text-sm font-medium text-yellow-400 block">Kode Akses
+                                Khusus</label>
+                            <input type="password" id="accessCode" name="accessCode" placeholder="Masukkan kode akses"
+                                class="input-field w-full bg-gray-900/50 border border-yellow-700/50 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-yellow-600 focus:ring-2 focus:ring-yellow-600/20">
+                            <p class="text-[10px] text-gray-500 italic">Kode diperlukan untuk role Admin/Manager</p>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="space-y-2">
+                            <label for="password" class="text-sm font-medium text-gray-300 block">Password</label>
+                            <div class="relative">
+                                <input type="password" id="password" name="password" placeholder="Minimal 8 karakter"
+                                    required
+                                    class="input-field w-full bg-gray-900/50 border border-gray-700 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#01036f] focus:ring-2 focus:ring-[#01036f]/20">
+                                <button type="button" id="togglePassword"
+                                    class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-300">
+                                    <svg id="eyeIcon" class="w-5 h-5" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z">
+                                        </path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <!-- Password Strength Indicator -->
+                            <div class="password-strength rounded-full overflow-hidden bg-gray-700">
+                                <div id="strengthBar" class="h-full transition-all duration-300" style="width: 0%">
+                                </div>
+                            </div>
+                            <p id="strengthText" class="text-xs text-gray-400"></p>
+                        </div>
+
+                        <!-- Sign Up Button -->
+                        <button type="submit"
+                            class="signup-btn w-full py-3 rounded-lg font-semibold text-white shadow-lg mt-2">
+                            Daftar Sekarang
+                        </button>
+                    </form>
+
+                    <!-- Divider -->
+                    <div class="relative">
+                        <div class="absolute inset-0 flex items-center">
+                            <div class="w-full border-t border-gray-700"></div>
+                        </div>
+                        <div class="relative flex justify-center text-sm">
+                            <span class="px-4 bg-black text-gray-400">Sudah punya akun?</span>
+                        </div>
+                    </div>
+
+                    <!-- Login Link -->
+                    <div class="text-center">
+                        <a href="login.html"
+                            class="text-blue-400 hover:text-blue-300 font-medium text-sm transition-colors">
+                            Masuk ke akun Anda
+                        </a>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="text-center space-y-2 pt-4">
+                        <p class="text-xs text-gray-500">
+                            © 2025 VendorBot – PT Waskita Karya
+                        </p>
+                        <p class="text-xs text-gray-600">
+                            Created by Raihan & Zaki
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/signup.js"></script>
+</body>
+
+</html>
