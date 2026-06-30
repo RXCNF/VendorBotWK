@@ -31,3 +31,9 @@ config.js
 
 # Data
 data/
+
+# OS specific and temporary files
+desktop.ini
+test_*.js
+certs/
+
